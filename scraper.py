@@ -21,6 +21,7 @@ try:
         EC.element_to_be_clickable((By.ID, "onetrust-accept-btn-handler"))
     ).click()
     print("Accepted cookies.")
+    time.sleep(5)
 
     while True:
         # Get page source and scrape the gamertags
