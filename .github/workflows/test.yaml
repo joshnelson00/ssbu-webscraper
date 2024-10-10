@@ -1,3 +1,17 @@
 name: SSBU Webscraper
 
-  
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    strategy:
+      matrix:
+        python-version: [3.12]
+      
