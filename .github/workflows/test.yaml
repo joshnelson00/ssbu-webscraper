@@ -8,13 +8,17 @@ on:
     branches:
       - main
   workflow_dispatch: 
-  
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: runwebscraper
+      - name: enter venv
+        run: source .venv/bin/activate
+        shell: bash
+
+      - name: run webscraper
         run: python3 scraper.py
         shell: bash
 
