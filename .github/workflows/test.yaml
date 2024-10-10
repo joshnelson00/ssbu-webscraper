@@ -8,10 +8,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./
-    strategy:
-      matrix:
-        python-version: [3.12]
+    steps:
+      - uses: actions/checkout@v3
+      - name: runwebscraper
+        run: python3 scraper.py
+        shell: bash
+
       
