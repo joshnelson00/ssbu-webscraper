@@ -31,7 +31,10 @@ jobs:
         run: |
           source .venv/bin/activate
           pip install -r requirements.txt
-
+      - name: Install Chromedriver
+        uses: ilammy/chromedriver-action@v2
+        with:
+          chromedriver-version: 'latest'  # or specify a version
       - name: Run your Python script
         run: |
           source .venv/bin/activate
