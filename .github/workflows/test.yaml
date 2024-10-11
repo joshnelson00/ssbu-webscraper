@@ -31,17 +31,38 @@ jobs:
         run: |
           source .venv/bin/activate
           pip install -r requirements.txt
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libnss3 \
+            libgconf-2-4 \
+            libappindicator1 \
+            libasound2 \
+            fonts-liberation \
+            libatk-bridge2.0-0 \
+            libgtk-3-0 \
+            libxss1 \
+            libxtst6 \
+            xdg-utils
+
+      - name: Set up Google Chrome
+        run: |
+          sudo apt-get install -y google-chrome-stable
+
       - name: Install Chromedriver
         run: |
           CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)
           wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
           unzip -o chromedriver_linux64.zip
-          sudo chmod +x ./chromedriver
+          chmod +x ./chromedriver
 
       - name: Verify ChromeDriver installation
         run: |
-          chromedriver --version
+          ./chromedriver --version
           google-chrome --version
+
       - name: Run your Python script
         run: |
           source .venv/bin/activate
