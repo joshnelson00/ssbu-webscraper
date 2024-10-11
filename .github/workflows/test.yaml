@@ -10,16 +10,31 @@ on:
   workflow_dispatch: 
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: enter venv
-        run: source .venv/bin/activate
-        shell: bash
 
-      - name: run webscraper
-        run: python3 scraper.py
-        shell: bash
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'  # Specify your Python version
+
+      - name: Create virtual environment
+        run: |
+          python -m venv .venv
+          echo "Virtual environment created."
+
+      - name: Activate virtual environment and install dependencies
+        run: |
+          source .venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Run your Python script
+        run: |
+          source .venv/bin/activate
+          python scraper.py
 
       
