@@ -1,4 +1,4 @@
-name: SSBU Webscraper
+name: Selenium Web Scraper - macOS
 
 on:
   push:
@@ -7,64 +7,45 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch: 
 
 jobs:
-  build:
+  test:
     runs-on: macos-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    # Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.12'  # Specify your Python version
+    # Set up Python
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
 
-      - name: Create virtual environment
-        run: |
-          python -m venv .venv
-          echo "Virtual environment created."
+    # Set up ChromeDriver (download from provided link or use local path)
+    - name: Download ChromeDriver
+      run: |
+        wget https://storage.googleapis.com/chrome-for-testing-public/129.0.6668.100/mac-arm64/chromedriver-mac-arm64.zip
+        unzip chromedriver-mac-arm64.zip
+        chmod +x chromedriver
+        sudo mv chromedriver /usr/local/bin/
 
-      - name: Activate virtual environment and install dependencies
-        run: |
-          source .venv/bin/activate
-          pip install -r requirements.txt
+    # Install dependencies
+    - name: Install dependencies
+      run: |
+        python -m venv .venv
+        source .venv/bin/activate
+        pip install -r requirements.txt
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libnss3 \
-            libgconf-2-4 \
-            libappindicator1 \
-            libasound2 \
-            fonts-liberation \
-            libatk-bridge2.0-0 \
-            libgtk-3-0 \
-            libxss1 \
-            libxtst6 \
-            xdg-utils
+    # Run the Python script
+    - name: Run Selenium script
+      run: |
+        source .venv/bin/activate
+        python scraper.py
 
-      - name: Set up Google Chrome
-        run: |
-          sudo apt-get install -y google-chrome-stable
-
-      - name: Install correct ChromeDriver version
-        run: |
-          CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1)
-          wget https://chromedriver.storage.googleapis.com/$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          chmod +x chromedriver
-          sudo mv chromedriver /usr/local/bin/
-
-      - name: Verify ChromeDriver installation
-        run: |
-          ./chromedriver --version
-          google-chrome --version
-
-      - name: Run your Python script
-        run: |
-          source .venv/bin/activate
-          python scraper.py
+    # Post-job cleanup
+    - name: Clean up
+      if: always()
+      run: |
+        sudo rm -rf chromedriver
