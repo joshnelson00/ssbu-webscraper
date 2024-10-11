@@ -28,8 +28,8 @@ jobs:
       run: |
         wget https://storage.googleapis.com/chrome-for-testing-public/129.0.6668.100/mac-arm64/chromedriver-mac-arm64.zip
         unzip chromedriver-mac-arm64.zip
-        chmod +x chromedriver
-        sudo mv chromedriver /usr/local/bin/
+        sudo chmod +x chromedriver
+        sudo mv chromedriver .
 
     # Install dependencies
     - name: Install dependencies
