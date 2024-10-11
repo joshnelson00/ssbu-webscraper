@@ -45,9 +45,12 @@ jobs:
           sudo mv chromedriver /usr/local/bin/
           sudo chmod +x /usr/local/bin/chromedriver
 
+      - name: Verify ChromeDriver installation
+        run: |
+          chromedriver --version
+          google-chrome --version
+
       - name: Run your Python script
         run: |
           source .venv/bin/activate
           python scraper.py
-
-      
