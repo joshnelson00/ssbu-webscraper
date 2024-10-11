@@ -9,10 +9,9 @@ from selenium.webdriver.support import expected_conditions as EC
 
 options = webdriver.ChromeOptions() 
 options.add_argument("--start-maximized") 
-options.add_argument('--log-level=3') 
-chrome_options.add_argument("--headless")  # Run Chrome in headless mode
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
+options.add_argument('--log-level=3')
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
 
 service = Service(executable_path = "./chromedriver", chrome_options=options)
 driver = webdriver.Chrome(service = service)
