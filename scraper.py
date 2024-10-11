@@ -8,10 +8,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 options = webdriver.ChromeOptions() 
-options.add_argument("--start-maximized") 
-options.add_argument('--log-level=3')
-options.add_argument("--no-sandbox")
-options.add_argument("--disable-dev-shm-usage")
+options.add_argument('--headless')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+options.add_argument('--disable-gpu')
 
 service = Service(executable_path = "./chromedriver", chrome_options=options)
 driver = webdriver.Chrome(service = service)
