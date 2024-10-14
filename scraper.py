@@ -8,13 +8,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 options = webdriver.ChromeOptions() 
-options.add_argument('--headless')
+# Uncomment if you want headless mode
+# options.add_argument('--headless')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--disable-gpu')
 
-service = Service(executable_path = "./chromedriver", chrome_options=options)
-driver = webdriver.Chrome(service = service, options=options)
+service = Service(executable_path="./chromedriver")  # Adjust the path to chromedriver if necessary
+driver = webdriver.Chrome(service=service, options=options)
 
 driver.get("https://www.start.gg/tournament/firefox-friday-120/attendees")
 
@@ -26,6 +27,7 @@ try:
     print("Accepted cookies.")
     time.sleep(5)
 
+    gamer_tags = []
     while True:
         # Get page source and scrape the gamertags
         html = driver.page_source
@@ -35,21 +37,43 @@ try:
         gamertags = soup.select('[data-test="gamertag"]')
         for gamertag in gamertags:
             print(gamertag.text)
+            gamer_tags.append(gamertag.text)
+        try:
+            # Wait for the "Next" button to be clickable
+            wait = WebDriverWait(driver, 10)
 
-        # Find the Next button
-        next_button = driver.find_element(By.CSS_SELECTOR, 'button.MuiButtonBase-root.MuiPaginationItem-previousNext')
+            # Use a more flexible selector for the next button
+            next_button = wait.until(
+                EC.presence_of_element_located((
+                    By.CSS_SELECTOR, '.MuiPaginationItem-root[aria-label="Go to next page"]'
+                ))
+            )
 
-        # Check if the "Next" button is enabled
-        if "Mui-disabled" not in next_button.get_attribute("class"):
-            next_button.click()  # Click the "Next" button
-            time.sleep(2)  # Wait for the next page to load
-        else:
-            print("No more pages to navigate.")
-            break  # Exit the loop if no more pages
+            # Ensure it is visible and enabled
+            if next_button.is_displayed() and next_button.is_enabled():
+                next_button.click()  # Click the "Next" button
+                print("------------------------------------------")
+                time.sleep(3)  # Wait for the next page to load
+            else:
+                print("No more pages to navigate.")
+                break  # Exit the loop if no more pages
+
+        except Exception as button_error:
+            print("Next button not found or clickable:", button_error)
+            break  # Exit loop if there's an error with the button
+
+
 
 except Exception as e:
     print("An error occurred:", e)
 
+
+
+# *** TOTAL GAMER TAGS HERE ***
+gamer_tags = sorted(gamer_tags)
+
+print(gamer_tags)
+
 # Close the browser after the loop
-time.sleep(10)
+# Perform Other/ Transferring Operations Here
 driver.quit()
