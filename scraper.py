@@ -74,6 +74,32 @@ gamer_tags = sorted(gamer_tags)
 
 print(gamer_tags)
 
+
+# https://smashdata.gg/smash/ultimate/player/  HTTP BASE
+
+
+for gamertag in gamer_tags:
+    driver.get("https://smashdata.gg/smash/ultimate/player/")
+
+    time.sleep(4)  # Wait for the page to load
+    input_field = driver.find_element(By.ID, "search_tag")
+    input_field.clear()  # Clear the input field before entering a new gamertag
+    input_field.send_keys(gamertag)
+    
+    WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.CLASS_NAME, "ui-menu-item-wrapper"))
+    ).click()
+    
+    time.sleep(3)  # Wait for the profile page to load
+
+    
+
+
+
+
+
 # Close the browser after the loop
 # Perform Other/ Transferring Operations Here
 driver.quit()
+
+
