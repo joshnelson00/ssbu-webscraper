@@ -18,7 +18,7 @@ service = Service(executable_path="./chromedriver")  # Adjust the path to chrome
 driver = webdriver.Chrome(service=service, options=options)
 
 driver.get("https://www.start.gg/tournament/firefox-friday-120/attendees")
-
+'''
 try:
     # Accept cookies first
     WebDriverWait(driver, 10).until(
@@ -71,6 +71,9 @@ except Exception as e:
 
 # *** TOTAL GAMER TAGS HERE ***
 gamer_tags = sorted(gamer_tags)
+'''
+
+gamer_tags = ['ThatPossiblePog']
 
 print(gamer_tags)
 
@@ -90,7 +93,21 @@ for gamertag in gamer_tags:
         EC.element_to_be_clickable((By.CLASS_NAME, "ui-menu-item-wrapper"))
     ).click()
     
-    time.sleep(3)  # Wait for the profile page to load
+    tournaments = driver.find_elements(By.CLASS_NAME, "tournament-listing")
+    for tournament in tournaments:
+        date = tournament.find_element(By.CLASS_NAME, "date")
+        print(date.text)
+        event = tournament.find_element(By.CLASS_NAME, "name-rank")
+        print(event.text)
+        placing = tournament.find_element(By.CLASS_NAME, "placing")
+        stripped_text = placing.text.replace(" ", "")
+        print(stripped_text)
+        print()
+
+    print()
+
+
+    time.sleep(5)  # Wait for the profile page to load0
 
     
 
